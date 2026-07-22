@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <!-- الترميز الخاص بالعربي -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>العجمي للمراتب - الفخامة والراحة</title>
     
-    <!-- خط جوجل المناسب للعربي (خط القاهرة) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- خطوط جوجل فاخرة -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style>
         /* ============================================================
-               تعليق عام: هنا نقوم بتصفير كل الإعدادات الافتراضية للمتصفح
-               ============================================================ */
+           تعليق: إعدادات عامة – ألوان ذهبية وداكنة فاخرة
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -21,529 +22,897 @@
 
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #0B1A2A; /* لون خلفية كحلي غامق */
-            color: #FFFFFF;
+            background-color: #0b0a0a;
+            color: #f5f0e8;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* ============================================================
-               تنسيق شريط التنقل العلوي (ثابت)
-               ============================================================ */
-        nav {
-            background-color: rgba(11, 26, 42, 0.95);
-            padding: 15px 50px;
+        /* ألوان الماركة */
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f5e18c;
+            --gold-dark: #b8962e;
+            --dark: #0b0a0a;
+            --dark-card: #1a1717;
+            --text-light: #f5f0e8;
+            --shadow-gold: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* شريط التنقل الثابت */
+        .navbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 999;
+            background: rgba(11, 10, 10, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--gold);
+            padding: 12px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #C8A05E; /* الخط الذهبي تحت الناف بار */
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(5px);
             flex-wrap: wrap;
+            transition: all 0.4s ease;
         }
 
-        .logo {
+        .navbar .logo {
             font-size: 28px;
-            font-weight: 800;
-            color: #C8A05E; /* اللون الذهبي */
-            text-shadow: 0 0 10px rgba(200, 160, 94, 0.3);
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
-        .logo span {
-            color: #FFFFFF;
+
+        .navbar .logo i {
+            margin-left: 10px;
         }
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             flex-wrap: wrap;
         }
+
         .nav-links a {
-            color: #FFFFFF;
+            color: var(--text-light);
             text-decoration: none;
             font-weight: 600;
-            font-size: 18px;
-            transition: 0.3s;
-            border-bottom: 2px solid transparent;
-            padding-bottom: 5px;
+            font-size: 16px;
+            padding: 6px 14px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
         }
-        .nav-links a:hover {
-            color: #C8A05E;
-            border-bottom-color: #C8A05E;
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--gold);
+            color: var(--dark);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* زر القائمة للجوال */
+        .menu-toggle {
+            display: none;
+            font-size: 28px;
+            color: var(--gold);
+            cursor: pointer;
         }
 
         /* ============================================================
-               تنسيق القسم الترحيبي (الهيرو)
-               ============================================================ */
-        .hero {
-            background: linear-gradient(135deg, #0B1A2A 60%, #1A2F44);
-            padding: 80px 20px;
-            text-align: center;
-            border-bottom: 1px solid #C8A05E;
-        }
-        .hero h1 {
-            font-size: 55px;
-            font-weight: 800;
-            color: #C8A05E;
-        }
-        .hero h1 span {
-            color: #FFFFFF;
-        }
-        .hero p {
-            font-size: 22px;
-            margin-top: 15px;
-            color: #CCCCCC;
-        }
-
-        /* ============================================================
-               تنسيق الأقسام العامة (مراتب - مخدات - تكاوي - مفروشات)
-               ============================================================ */
-        .section {
-            padding: 60px 40px;
+           الصفحات (الأقسام) – كل قسم يعتبر "صفحة"
+           ============================================================ */
+        .page {
+            display: none;
+            padding: 110px 30px 60px;
             max-width: 1400px;
             margin: 0 auto;
+            animation: fadeInPage 0.6s ease forwards;
         }
 
+        .page.active-page {
+            display: block;
+        }
+
+        @keyframes fadeInPage {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           الصفحة الرئيسية (الترحيب)
+           ============================================================ */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            background: radial-gradient(circle at 30% 30%, #1f1a17, #0b0a0a);
+            border-radius: 40px;
+            padding: 50px 30px;
+            margin-bottom: 40px;
+            border: 1px solid var(--gold-dark);
+            box-shadow: var(--shadow-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
+            animation: rotateGlow 20s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+            z-index: 2;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 i {
+            margin-left: 15px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #ccc;
+            z-index: 2;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+
+        .hero .btn-gold {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 16px 50px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            z-index: 2;
+            text-decoration: none;
+        }
+
+        .hero .btn-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.6);
+        }
+
+        /* ============================================================
+           بطاقات المنتجات – نظام شبكي 4 عناصر
+           ============================================================ */
         .section-title {
-            font-size: 40px;
-            font-weight: 800;
-            color: #C8A05E;
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--gold);
             text-align: center;
             margin-bottom: 50px;
             position: relative;
         }
+
         .section-title::after {
             content: '';
-            width: 80px;
-            height: 4px;
-            background-color: #C8A05E;
             display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--gold);
             margin: 10px auto 0;
             border-radius: 10px;
         }
 
-        /* ============================================================
-               شبكة المنتجات (كل قسم يحتوي على 4 منتجات)
-               ============================================================ */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-
-        /* ============================================================
-               بطاقة المنتج الواحدة (مكان رفع الصورة والاسم)
-               ============================================================ */
-        .product-card {
-            background-color: #14273E;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            border: 1px solid rgba(200, 160, 94, 0.2);
-            display: flex;
-            flex-direction: column;
-        }
-        .product-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 40px rgba(200, 160, 94, 0.15);
-            border-color: #C8A05E;
-        }
-
-        /* ============================================================
-               ★★ مكان الصورة ★★ 
-               غير الرابط (background-image) أو ضع <img> بدلاً منه
-               ============================================================ */
-        .product-image {
-            width: 100%;
-            height: 250px;
-            background-color: #0B1A2A;
-            background-size: cover;
-            background-position: center;
-            border-bottom: 3px solid #C8A05E;
-            position: relative;
-        }
-        /* مثال: لو عايز تحط صورة جوه الـ HTML مش الـ CSS، استخدم <img> داخل الـ card */
-
-        .product-info {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ============================================================
-               ★★ مكان اسم المنتج ★★ 
-               ============================================================ */
-        .product-name {
-            font-size: 22px;
-            font-weight: 700;
-            color: #FFFFFF;
-            margin-bottom: 10px;
-        }
-
-        .product-desc {
-            font-size: 14px;
-            color: #AAAAAA;
-            margin-bottom: 20px;
-            flex-grow: 1;
-        }
-
-        /* ============================================================
-               زر طلب الآن (اللي بيحول على واتساب)
-               ============================================================ */
-        .btn-whatsapp {
-            background-color: #C8A05E;
-            color: #0B1A2A;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: 'Cairo', sans-serif;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(200, 160, 94, 0.3);
-        }
-        .btn-whatsapp:hover {
-            background-color: #FFFFFF;
-            color: #0B1A2A;
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(200, 160, 94, 0.5);
-        }
-
-        /* ============================================================
-               تنسيق قسم التواصل (ال footer)
-               ============================================================ */
-        .contact-section {
-            background-color: #0A1625;
-            padding: 50px 40px;
-            text-align: center;
-            border-top: 2px solid #C8A05E;
-            margin-top: 40px;
-        }
-        .contact-section h2 {
-            color: #C8A05E;
-            font-size: 35px;
-            margin-bottom: 20px;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 35px;
             margin-top: 20px;
         }
-        .social-links a {
-            background-color: #14273E;
-            padding: 15px 40px;
-            border-radius: 60px;
-            color: #FFFFFF;
-            font-size: 20px;
+
+        /* بطاقة المنتج */
+        .product-card {
+            background: var(--dark-card);
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid #2a2522;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--gold);
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.25);
+        }
+
+        .product-card .img-container {
+            width: 100%;
+            height: 240px;
+            background: #1f1a17;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-card .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .img-container img {
+            transform: scale(1.08);
+        }
+
+        .product-card .product-info {
+            padding: 22px 20px 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card .product-info h3 {
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+        }
+
+        .product-card .product-info p {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+            flex: 1;
+        }
+
+        /* زر طلب الآن */
+        .btn-order {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 20px;
+            border-radius: 50px;
             font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             text-decoration: none;
-            border: 1px solid #C8A05E;
-            transition: 0.3s;
+            width: 100%;
+            margin-top: 5px;
         }
-        .social-links a:hover {
-            background-color: #C8A05E;
-            color: #0B1A2A;
-            transform: scale(1.05);
+
+        .btn-order i {
+            font-size: 1.2rem;
         }
-        .whatsapp-link {
-            background-color: #25D366 !important;
-            border-color: #25D366 !important;
-        }
-        .whatsapp-link:hover {
-            background-color: #FFFFFF !important;
-            color: #25D366 !important;
+
+        .btn-order:hover {
+            background: var(--gold);
+            color: var(--dark);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            transform: scale(1.03);
         }
 
         /* ============================================================
-               تنسيق للشاشات الصغيرة (الجوال)
-               ============================================================ */
+           صفحة التواصل
+           ============================================================ */
+        .contact-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .contact-card {
+            background: var(--dark-card);
+            padding: 40px 30px;
+            border-radius: 30px;
+            text-align: center;
+            min-width: 220px;
+            flex: 1 1 200px;
+            border: 1px solid #2a2522;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .contact-card i {
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        .contact-card h3 {
+            font-size: 1.6rem;
+            color: var(--gold-light);
+        }
+
+        .contact-card a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            margin-top: 10px;
+            transition: color 0.3s;
+        }
+
+        .contact-card a:hover {
+            color: var(--gold);
+        }
+
+        .contact-card .btn-gold {
+            display: inline-block;
+            margin-top: 20px;
+            background: var(--gold);
+            color: var(--dark);
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .contact-card .btn-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+
+        /* ============================================================
+           تذييل الصفحة
+           ============================================================ */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid #2a2522;
+            color: #777;
+            margin-top: 60px;
+            font-size: 0.9rem;
+        }
+
+        footer span {
+            color: var(--gold);
+        }
+
+        /* ============================================================
+           استجابة للجوال
+           ============================================================ */
         @media (max-width: 768px) {
-            nav {
-                padding: 15px 20px;
-                flex-direction: column;
-                gap: 15px;
+            .navbar {
+                padding: 10px 20px;
             }
             .nav-links {
-                justify-content: center;
-                gap: 15px;
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: rgba(11, 10, 10, 0.98);
+                padding: 20px 0;
+                border-radius: 20px;
+                margin-top: 10px;
+                gap: 10px;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
             }
             .hero h1 {
-                font-size: 35px;
+                font-size: 2.8rem;
             }
-            .section {
-                padding: 40px 15px;
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .section-title {
+                font-size: 2.2rem;
             }
             .products-grid {
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-                gap: 20px;
+                grid-template-columns: 1fr 1fr;
             }
-            .social-links a {
-                padding: 12px 25px;
-                font-size: 16px;
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
             }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* ============================================================
+           أنيميشن إضافية
+           ============================================================ */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
-    شريط التنقل (الرئيسية - المراتب - المخدات - التكاوي - المفروشات - تواصل)
-    ============================================================ -->
-    <nav>
-        <div class="logo">العجمي <span>للمراتب</span></div>
-        <div class="nav-links">
-            <a href="#mattresses">المراتب</a>
-            <a href="#pillows">المخدات</a>
-            <a href="#blankets">التكاوي</a>
-            <a href="#furniture">المفروشات</a>
-            <a href="#contact">تواصل</a>
+<!-- ============================================================
+     شريط التنقل
+     ============================================================ -->
+<nav class="navbar" id="navbar">
+    <div class="logo">
+        <i class="fas fa-bed"></i> العجمي للمراتب
+    </div>
+    <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </div>
+    <div class="nav-links" id="navLinks">
+        <a href="#" class="nav-link active" data-page="home">الرئيسية</a>
+        <a href="#" class="nav-link" data-page="mattresses">المراتب</a>
+        <a href="#" class="nav-link" data-page="pillows">المخدات</a>
+        <a href="#" class="nav-link" data-page="blankets">التكاوي</a>
+        <a href="#" class="nav-link" data-page="furniture">المفروشات</a>
+        <a href="#" class="nav-link" data-page="contact">تواصل</a>
+    </div>
+</nav>
+
+<!-- ============================================================
+     الصفحة الرئيسية
+     ============================================================ -->
+<section class="page active-page" id="page-home">
+    <div class="hero">
+        <h1><i class="fas fa-crown"></i> العجمي للمراتب</h1>
+        <p>نصنع لك الراحة الفاخرة بأعلى معايير الجودة، مراتب ومخدات وتكاوي ومفروشات تناسب ذوقك الرفيع.</p>
+        <a href="#" class="btn-gold" onclick="navigateTo('mattresses')">استكشف مجموعتنا <i class="fas fa-arrow-left"></i></a>
+    </div>
+
+    <!-- قسم مميزات سريعة -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap:30px; margin-top:20px;">
+        <div style="background:var(--dark-card); padding:30px; border-radius:30px; text-align:center; border:1px solid #2a2522;">
+            <i class="fas fa-star" style="color:var(--gold); font-size:3rem;"></i>
+            <h3 style="color:var(--gold-light); margin-top:15px;">جودة فاخرة</h3>
+            <p style="color:#aaa;">أفضل المواد وأحدث التقنيات</p>
         </div>
-    </nav>
+        <div style="background:var(--dark-card); padding:30px; border-radius:30px; text-align:center; border:1px solid #2a2522;">
+            <i class="fas fa-truck" style="color:var(--gold); font-size:3rem;"></i>
+            <h3 style="color:var(--gold-light); margin-top:15px;">توصيل سريع</h3>
+            <p style="color:#aaa;">خدمة توصيل لكافة المناطق</p>
+        </div>
+        <div style="background:var(--dark-card); padding:30px; border-radius:30px; text-align:center; border:1px solid #2a2522;">
+            <i class="fas fa-handshake" style="color:var(--gold); font-size:3rem;"></i>
+            <h3 style="color:var(--gold-light); margin-top:15px;">ضمان شامل</h3>
+            <p style="color:#aaa;">ضمان يصل إلى 10 سنوات</p>
+        </div>
+    </div>
+</section>
 
-    <!-- ============================================================
-    القسم الترحيبي
-    ============================================================ -->
-    <section class="hero">
-        <h1>العجمي <span>للمراتب</span></h1>
-        <p>الفخامة الأوروبية والراحة التي لا تضاهى - نصنع لك أفضل ليالي النوم</p>
-    </section>
-
-    <!-- ============================================================
-    القسم الأول: مراتب (فيه 4 أماكن لرفع الصور والأسماء)
-    ============================================================ -->
-    <section id="mattresses" class="section">
-        <h2 class="section-title">🛏️ قسم المراتب</h2>
-        <div class="products-grid">
-
-            <!-- ===== المنتج رقم 1 ===== -->
-            <div class="product-card">
-                <!-- ★★ غير الرابط ده باسم صورتك ★★ -->
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مرتبة+فاخرة+1');"></div>
-                <div class="product-info">
-                    <!-- ★★ غير الاسم ده بالاسم اللي انت عايزه ★★ -->
-                    <h3 class="product-name">مرتبة الفخامة الذهبية</h3>
-                    <p class="product-desc">إسفنج طبي عالي الكثافة مع طبقة تبريد</p>
-                    <!-- زر طلب الآن - هيرسل اسم المنتج تلقائياً للواتساب -->
-                    <button class="btn-whatsapp" onclick="orderNow('مرتبة الفخامة الذهبية')">📲 طلب الآن</button>
-                </div>
+<!-- ============================================================
+     صفحة المراتب (4 منتجات)
+     ============================================================ -->
+<section class="page" id="page-mattresses">
+    <h2 class="section-title"><i class="fas fa-bed"></i> مراتب النوم الفاخرة</h2>
+    <div class="products-grid" id="mattressesGrid">
+        <!-- المنتج 1 -->
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <!-- 👇 ضع رابط صورة المرتبة الأولى هنا -->
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مرتبة+ذهبية" alt="مرتبة ذهبية">
             </div>
-
-            <!-- ===== المنتج رقم 2 ===== -->
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مرتبة+طبيه+2');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مرتبة الأورثوبيديك</h3>
-                    <p class="product-desc">داعمة للظهر ومثالية للأمراض العظمية</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مرتبة الأورثوبيديك')">📲 طلب الآن</button>
-                </div>
-            </div>
-
-            <!-- ===== المنتج رقم 3 ===== -->
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مرتبة+بونس+3');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مرتبة بونس بلس</h3>
-                    <p class="product-desc">ناعمة جداً ومثالية للنوم العميق</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مرتبة بونس بلس')">📲 طلب الآن</button>
-                </div>
-            </div>
-
-            <!-- ===== المنتج رقم 4 ===== -->
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مرتبة+سوبر+4');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مرتبة سوبر كينج</h3>
-                    <p class="product-desc">مقاس كبير جداً ومناسبة للعائلات</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مرتبة سوبر كينج')">📲 طلب الآن</button>
-                </div>
+            <div class="product-info">
+                <h3>مرتبة رويال جولد</h3>
+                <p>نوم هانئ مع طبقة ذاكرة فائقة النعومة وتقنية التبريد.</p>
+                <button class="btn-order" onclick="orderProduct('مرتبة رويال جولد')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
             </div>
         </div>
-    </section>
-
-    <!-- ============================================================
-    القسم الثاني: مخدات (فيه 4 أماكن)
-    ============================================================ -->
-    <section id="pillows" class="section">
-        <h2 class="section-title">🛏️ قسم المخدات</h2>
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مخدة+طبية+1');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مخدة طبية عنق الرحم</h3>
-                    <p class="product-desc">مصممة لتقويم فقرات الرقبة</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مخدة طبية عنق الرحم')">📲 طلب الآن</button>
-                </div>
+        <!-- المنتج 2 -->
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مرتبة+كلاسيك" alt="مرتبة كلاسيك">
             </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مخدة+قطن+2');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مخدة قطن طبيعي</h3>
-                    <p class="product-desc">100% قطن عضوي ناعم</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مخدة قطن طبيعي')">📲 طلب الآن</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مخدة+اسفنج+3');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مخدة إسفنج ذكي</h3>
-                    <p class="product-desc">تأخذ شكل رأسك لراحة فائقة</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مخدة إسفنج ذكي')">📲 طلب الآن</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مخدة+زوجي+4');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مخدة زوجي كبير</h3>
-                    <p class="product-desc">مقاس كبير يناسب القراءة والنوم</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مخدة زوجي كبير')">📲 طلب الآن</button>
-                </div>
+            <div class="product-info">
+                <h3>مرتبة كلاسيك بريميوم</h3>
+                <p>مزيج من الإسفنج عالي الكثافة والينابيع المستقلة.</p>
+                <button class="btn-order" onclick="orderProduct('مرتبة كلاسيك بريميوم')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
             </div>
         </div>
-    </section>
-
-    <!-- ============================================================
-    القسم الثالث: تكاوي (فيه 4 أماكن)
-    ============================================================ -->
-    <section id="blankets" class="section">
-        <h2 class="section-title">🧶 قسم التكاوي</h2>
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=بطانية+شتوي+1');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">بطانية شتوي ثقيلة</h3>
-                    <p class="product-desc">صوف طبيعي ثقيل للبرد القارس</p>
-                    <button class="btn-whatsapp" onclick="orderNow('بطانية شتوي ثقيلة')">📲 طلب الآن</button>
-                </div>
+        <!-- المنتج 3 -->
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مرتبة+طبية" alt="مرتبة طبية">
             </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=لحاف+صيفي+2');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">لحاف صيفي خفيف</h3>
-                    <p class="product-desc">خامة قطنية مريحة للصيف</p>
-                    <button class="btn-whatsapp" onclick="orderNow('لحاف صيفي خفيف')">📲 طلب الآن</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=شرشف+مخمل+3');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">شرشف مخمل فاخر</h3>
-                    <p class="product-desc">ملمس ناعم ودافئ</p>
-                    <button class="btn-whatsapp" onclick="orderNow('شرشف مخمل فاخر')">📲 طلب الآن</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=غطاء+سرير+4');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">غطاء سرير مطرز</h3>
-                    <p class="product-desc">بتطريزات ذهبية أنيقة</p>
-                    <button class="btn-whatsapp" onclick="orderNow('غطاء سرير مطرز')">📲 طلب الآن</button>
-                </div>
+            <div class="product-info">
+                <h3>مرتبة طبية أورثوبيدك</h3>
+                <p>دعم مثالي للعمود الفقري، مصممة لتخفيف آلام الظهر.</p>
+                <button class="btn-order" onclick="orderProduct('مرتبة طبية أورثوبيدك')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
             </div>
         </div>
-    </section>
-
-    <!-- ============================================================
-    القسم الرابع: مفروشات (فيه 4 أماكن)
-    ============================================================ -->
-    <section id="furniture" class="section">
-        <h2 class="section-title">🛋️ قسم المفروشات</h2>
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=كنبة+جلد+1');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">كنبة جلد طبيعي</h3>
-                    <p class="product-desc">جلد إيطالي فاخر بإطار خشب زان</p>
-                    <button class="btn-whatsapp" onclick="orderNow('كنبة جلد طبيعي')">📲 طلب الآن</button>
-                </div>
+        <!-- المنتج 4 -->
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مرتبة+فاخرة" alt="مرتبة فاخرة">
             </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=طقم+غرف+نوم+2');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">طقم غرف نوم كامل</h3>
-                    <p class="product-desc">سرير + دولاب + تسريحة</p>
-                    <button class="btn-whatsapp" onclick="orderNow('طقم غرف نوم كامل')">📲 طلب الآن</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=مراتب+ضيوف+3');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">مراتب ضيوف قابلة للطي</h3>
-                    <p class="product-desc">مريحة وسهلة التخزين</p>
-                    <button class="btn-whatsapp" onclick="orderNow('مراتب ضيوف قابلة للطي')">📲 طلب الآن</button>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-image" style="background-image: url('https://via.placeholder.com/400x250/C8A05E/0B1A2A?text=طقم+مكتب+4');"></div>
-                <div class="product-info">
-                    <h3 class="product-name">طقم مكتب أنيق</h3>
-                    <p class="product-desc">مكتب + كرسي دوران</p>
-                    <button class="btn-whatsapp" onclick="orderNow('طقم مكتب أنيق')">📲 طلب الآن</button>
-                </div>
+            <div class="product-info">
+                <h3>مرتبة فيلا ديلوكس</h3>
+                <p>طبقة علوية من الحرير الطبيعي وحشوة من الصوف الفاخر.</p>
+                <button class="btn-order" onclick="orderProduct('مرتبة فيلا ديلوكس')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- ============================================================
-    قسم التواصل (الوتساب والفيس بوك)
-    ============================================================ -->
-    <section id="contact" class="contact-section">
-        <h2>📞 تواصل معنا</h2>
-        <p style="color: #AAA; font-size: 18px; margin-bottom: 20px;">
-            خدمة العملاء متاحة 24 ساعة - رد فوري على واتساب
-        </p>
-        <div class="social-links">
-            <!-- رابط واتساب المطلوب مع الرقم -->
-            <a href="https://wa.me/201003555377" target="_blank" class="whatsapp-link">
-                💬 واتساب: 01003555377
+<!-- ============================================================
+     صفحة المخدات (4 منتجات)
+     ============================================================ -->
+<section class="page" id="page-pillows">
+    <h2 class="section-title"><i class="fas fa-cloud"></i> مخدات فاخرة</h2>
+    <div class="products-grid" id="pillowsGrid">
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مخدة+ناعمة" alt="مخدة ناعمة">
+            </div>
+            <div class="product-info">
+                <h3>مخدة دانتيل ناعمة</h3>
+                <p>حشوة من ألياف السيليكون فائقة النعومة، غطاء من القطن المصري.</p>
+                <button class="btn-order" onclick="orderProduct('مخدة دانتيل ناعمة')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مخدة+طبية" alt="مخدة طبية">
+            </div>
+            <div class="product-info">
+                <h3>مخدة تقويم العنق</h3>
+                <p>تصميم طبي يدعم الرقبة ويقلل الشخير، حشوة من الإسفنج الذكي.</p>
+                <button class="btn-order" onclick="orderProduct('مخدة تقويم العنق')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مخدة+حرير" alt="مخدة حرير">
+            </div>
+            <div class="product-info">
+                <h3>مخدة حرير طبيعي</h3>
+                <p>غطاء من الحرير الطبيعي 100%، حشوة من ريش البط الفاخر.</p>
+                <button class="btn-order" onclick="orderProduct('مخدة حرير طبيعي')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مخدة+مضادة+للحساسية" alt="مخدة مضادة للحساسية">
+            </div>
+            <div class="product-info">
+                <h3>مخدة هيبوالرجينيك</h3>
+                <p>مثالية لمرضى الحساسية، مقاومة للعث والبكتيريا.</p>
+                <button class="btn-order" onclick="orderProduct('مخدة هيبوالرجينيك')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     صفحة التكاوي (4 منتجات)
+     ============================================================ -->
+<section class="page" id="page-blankets">
+    <h2 class="section-title"><i class="fas fa-thermal-half"></i> تكاوي فاخرة</h2>
+    <div class="products-grid" id="blanketsGrid">
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=لحاف+شتوي" alt="لحاف شتوي">
+            </div>
+            <div class="product-info">
+                <h3>لحاف شتوي ملكي</h3>
+                <p>مليء بالصوف الطبيعي، ثقيل ودافئ لفصل الشتاء القارس.</p>
+                <button class="btn-order" onclick="orderProduct('لحاف شتوي ملكي')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=لحاف+صيفي" alt="لحاف صيفي">
+            </div>
+            <div class="product-info">
+                <h3>لحاف صيفي خفيف</h3>
+                <p>قطن ناعم وحشوة خفيفة التهوية لمنع التعرق.</p>
+                <button class="btn-order" onclick="orderProduct('لحاف صيفي خفيف')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=بطانية+صوف" alt="بطانية صوف">
+            </div>
+            <div class="product-info">
+                <h3>بطانية صوف كشمير</h3>
+                <p>من أجود أنواع الصوف الكشميري، ناعمة ودافئة جداً.</p>
+                <button class="btn-order" onclick="orderProduct('بطانية صوف كشمير')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=لحاف+طفل" alt="لحاف طفل">
+            </div>
+            <div class="product-info">
+                <h3>لحاف أطفال ناعم</h3>
+                <p>خالي من المواد الضارة، خفيف وآمن لبشرة الطفل.</p>
+                <button class="btn-order" onclick="orderProduct('لحاف أطفال ناعم')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     صفحة المفروشات (4 منتجات)
+     ============================================================ -->
+<section class="page" id="page-furniture">
+    <h2 class="section-title"><i class="fas fa-couch"></i> مفروشات راقية</h2>
+    <div class="products-grid" id="furnitureGrid">
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=طقم+كنب" alt="طقم كنب">
+            </div>
+            <div class="product-info">
+                <h3>طقم كنب كلاسيك</h3>
+                <p>تنجيد من الجلد الطبيعي، هيكل من الخشب الصلب، ألوان أنيقة.</p>
+                <button class="btn-order" onclick="orderProduct('طقم كنب كلاسيك')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=ستائر+فاخرة" alt="ستائر فاخرة">
+            </div>
+            <div class="product-info">
+                <h3>ستائر حرير مطرزة</h3>
+                <p>قماش حريري بتطريزات ذهبية، عازلة للضوء والحرارة.</p>
+                <button class="btn-order" onclick="orderProduct('ستائر حرير مطرزة')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=سجاد+يدوي" alt="سجاد يدوي">
+            </div>
+            <div class="product-info">
+                <h3>سجاد يدوي فاخر</h3>
+                <p>مصنوع يدوياً من الصوف الفارسي، نقشات كلاسيكية.</p>
+                <button class="btn-order" onclick="orderProduct('سجاد يدوي فاخر')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+        <div class="product-card fade-up">
+            <div class="img-container">
+                <img src="https://via.placeholder.com/400x300/1f1a17/d4af37?text=مفرش+سرير" alt="مفرش سرير">
+            </div>
+            <div class="product-info">
+                <h3>مفرش سرير ملكي</h3>
+                <p>مجموعة كاملة من القطن الفاخر بتطريزات ذهبية وحريرية.</p>
+                <button class="btn-order" onclick="orderProduct('مفرش سرير ملكي')">
+                    <i class="fab fa-whatsapp"></i> طلب الآن
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     صفحة التواصل
+     ============================================================ -->
+<section class="page" id="page-contact">
+    <h2 class="section-title"><i class="fas fa-address-card"></i> تواصل معنا</h2>
+    <div class="contact-section">
+        <!-- واتساب -->
+        <div class="contact-card">
+            <i class="fab fa-whatsapp"></i>
+            <h3>واتساب</h3>
+            <a href="https://wa.me/201003555377" target="_blank">+20 10 03555377</a>
+            <a href="https://wa.me/201003555377?text=أهلاً،%20أرغب%20في%20الاستفسار%20عن%20منتجاتكم%20الفاخرة" target="_blank" class="btn-gold">
+                <i class="fab fa-whatsapp"></i> راسلنا الآن
             </a>
-            <!-- رابط الفيس بوك المطلوب -->
-            <a href="https://www.facebook.com/share/1BNXAdpG7f/" target="_blank">
-                📘 فيسبوك
+        </div>
+        <!-- فيسبوك -->
+        <div class="contact-card">
+            <i class="fab fa-facebook-f"></i>
+            <h3>فيسبوك</h3>
+            <a href="https://www.facebook.com/share/1BNXAdpG7f/" target="_blank">صفحتنا على فيسبوك</a>
+            <a href="https://www.facebook.com/share/1BNXAdpG7f/" target="_blank" class="btn-gold">
+                <i class="fab fa-facebook-f"></i> زورنا
             </a>
         </div>
-        <p style="color: #666; margin-top: 30px; font-size: 14px;">
-            © 2026 العجمي للمراتب - جميع الحقوق محفوظة
-        </p>
-    </section>
+        <!-- إيميل / نموذج بسيط -->
+        <div class="contact-card">
+            <i class="fas fa-envelope"></i>
+            <h3>البريد الإلكتروني</h3>
+            <a href="mailto:info@alajmy.com">info@alajmy.com</a>
+            <p style="color:#aaa; margin-top:15px;">نرد خلال 24 ساعة</p>
+        </div>
+    </div>
+</section>
 
-    <!-- ============================================================
-    جافا سكريبت: وظيفة الطلب عبر واتساب
-    ============================================================ -->
-    <script>
-        /**
-         * ============================================================
-         * دالة orderNow
-         * المهمة: تستقبل اسم المنتج، وتبني رابط واتساب تلقائي
-         * بحيث يظهر للمندوب رسالة: "طلب الآن + عنوان المنتج"
-         * ============================================================
-         */
-        function orderNow(productName) {
-            // رقم الهاتف المسجل في الموقع (تم وضعه في الأعلى)
-            const phone = '201003555377';
-            
-            // نكتب الرسالة التي ستظهر في واتساب (طلب الآن + اسم المنتج)
-            const message = `طلب الآن : ${productName}`;
-            
-            // ترميز الرسالة لتناسب رابط URL
-            const encodedMessage = encodeURIComponent(message);
-            
-            // بناء الرابط النهائي لواتساب
-            const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
-            
-            // فتح الرابط في نافذة جديدة (أو تحويل المستخدم إليه)
-            window.open(whatsappURL, '_blank');
+<!-- ============================================================
+     تذييل
+     ============================================================ -->
+<footer>
+    <p>© 2026 <span>العجمي للمراتب</span> – جميع الحقوق محفوظة. صنع بفخامة <i class="fas fa-crown" style="color:var(--gold);"></i></p>
+</footer>
+
+<!-- ============================================================
+     جافا سكريبت – التحكم بالصفحات، التنقل، الطلب، الأنيميشن
+     ============================================================ -->
+<script>
+    // ============================================================
+    // 1. التبديل بين الصفحات (الأقسام) مع تحديث الرابط
+    // ============================================================
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function navigateTo(pageId) {
+        // إخفاء كل الصفحات
+        pages.forEach(p => p.classList.remove('active-page'));
+        // إظهار الصفحة المطلوبة
+        const target = document.getElementById('page-' + pageId);
+        if (target) {
+            target.classList.add('active-page');
+            // تشغيل أنيميشن الظهور (يتم عبر CSS بالفعل)
+            // تحديث حالة الروابط
+            navLinks.forEach(link => link.classList.remove('active'));
+            document.querySelector(`.nav-link[data-page="${pageId}"]`)?.classList.add('active');
+            // تغيير عنوان الصفحة
+            const titles = {
+                home: 'الرئيسية',
+                mattresses: 'المراتب',
+                pillows: 'المخدات',
+                blankets: 'التكاوي',
+                furniture: 'المفروشات',
+                contact: 'تواصل'
+            };
+            document.title = `العجمي للمراتب - ${titles[pageId] || 'فاخر'}`;
+            // تمرير لأعلى الصفحة
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        // غلق قائمة الجوال
+        document.getElementById('navLinks').classList.remove('open');
+    }
 
-        // ملاحظة: إذا أردت إضافة المزيد من المنتجات، انسخ بطاقة المنتج
-        // product-card وغير الاسم والصورة واستدع الدالة بنفس الطريقة.
-    </script>
+    // إضافة مستمعين لروابط التنقل
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const pageId = this.getAttribute('data-page');
+            navigateTo(pageId);
+        });
+    });
+
+    // جعل دالة navigateTo متاحة عالمياً للاستخدام في الـ HTML
+    window.navigateTo = navigateTo;
+
+    // ============================================================
+    // 2. زر القائمة للجوال
+    // ============================================================
+    document.getElementById('menuToggle').addEventListener('click', function() {
+        document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // ============================================================
+    // 3. وظيفة طلب المنتج عبر واتساب (ترسل رسالة جاهزة)
+    // ============================================================
+    function orderProduct(productName) {
+        // رقم واتساب (تم إزالته من التنسيق للرابط)
+        const phone = '201003555377'; // بدون + أو صفر في البداية
+        // نص الرسالة
+        const message = `أهلاً، أرغب في طلب المنتج التالي: ${productName} من العجمي للمراتب.`;
+        // إنشاء الرابط
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        // فتح في نافذة جديدة
+        window.open(url, '_blank');
+    }
+
+    // جعل الدالة متاحة عالمياً
+    window.orderProduct = orderProduct;
+
+    // ============================================================
+    // 4. أنيميشن ظهور البطاقات عند التمرير (Intersection Observer)
+    // ============================================================
+    const cards = document.querySelectorAll('.fade-up');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -30px 0px'
+    });
+
+    cards.forEach(card => observer.observe(card));
+
+    // ============================================================
+    // 5. عند تحميل الصفحة، تأكد من أن الصفحة الرئيسية نشطة
+    // ============================================================
+    // نفترض أن الصفحة الرئيسية هي النشطة افتراضياً، لكن نتأكد
+    window.addEventListener('load', function() {
+        // إذا لم تكن أي صفحة نشطة، نفعّل الرئيسية
+        const activeExists = document.querySelector('.page.active-page');
+        if (!activeExists) {
+            navigateTo('home');
+        } else {
+            // تحديث الروابط لتتناسب مع الصفحة الظاهرة
+            const activePageId = document.querySelector('.page.active-page')?.id.replace('page-', '');
+            if (activePageId) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                document.querySelector(`.nav-link[data-page="${activePageId}"]`)?.classList.add('active');
+            }
+        }
+    });
+
+    // ============================================================
+    // 6. (اختياري) إغلاق القائمة عند النقر خارجها
+    // ============================================================
+    document.addEventListener('click', function(e) {
+        const nav = document.getElementById('navLinks');
+        const toggle = document.getElementById('menuToggle');
+        if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+            nav.classList.remove('open');
+        }
+    });
+
+    console.log('🚀 موقع العجمي للمراتب جاهز – فاخر ومتكامل!');
+</script>
 
 </body>
-                      </html>
+</html>
